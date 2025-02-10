@@ -3,104 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Flora Hostel</title>
+    <title>Room Booking</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        .room-img {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
         }
-        .login-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            width: 350px;
-            text-align: center;
-        }
-        .login-container h2 {
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
             margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        .btn-container {
-            display: flex;
-            justify-content: space-between;
-        }
-        .error {
-            color: red;
-            font-size: 14px;
         }
     </style>
 </head>
 <body>
-
-<div class="login-container">
-    <h2>Login</h2>
-    <form id="loginForm">
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" class="form-control" required>
+    <div class="container mt-5">
+        <!-- Grid Images at Top -->
+        <div class="grid-container">
+            <img src="https://via.placeholder.com/300" class="img-fluid room-img" alt="Room Image 1">
+            <img src="https://via.placeholder.com/300" class="img-fluid room-img" alt="Room Image 2">
+            <img src="https://via.placeholder.com/300" class="img-fluid room-img" alt="Room Image 3">
+            <img src="https://via.placeholder.com/300" class="img-fluid room-img" alt="Room Image 4">
         </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" class="form-control" required>
+
+        <h2 class="text-center">Book Your Room</h2>
+
+        <!-- Room Booking Form -->
+        <form id="bookingForm" class="mt-4">
+            <div class="mb-3">
+                <label class="form-label">Select Floor:</label>
+                <select id="floor" class="form-control" onchange="updateRooms()">
+                    <option value="1">1st Floor</option>
+                    <option value="2">2nd Floor</option>
+                    <option value="3">3rd Floor</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Select Room:</label>
+                <select id="room" class="form-control"></select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Room Type:</label>
+                <select class="form-control">
+                    <option>3 Sharing</option>
+                    <option>4 Sharing</option>
+                    <option>6 Sharing</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Room Preference:</label>
+                <select id="roomType" class="form-control">
+                    <option value="AC">AC Room</option>
+                    <option value="Non-AC">Non-AC Room</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Name:</label>
+                <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Father's Name:</label>
+                <input type="text" class="form-control" id="fatherName" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Mother's Name:</label>
+                <input type="text" class="form-control" id="motherName" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email:</label>
+                <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Phone Number:</label>
+                <input type="tel" class="form-control" id="phone" pattern="[0-9]{10}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Aadhar Number:</label>
+                <input type="text" class="form-control" id="aadhar" pattern="[0-9]{12}" required>
+            </div>
+            <button type="submit" class="btn btn-success">Book Room</button>
+        </form>
+    </div>
+
+    <!-- Pop-up Modal for Booking Confirmation -->
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bookingModalLabel">Booking Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="bookingStatusMessage">
+                    <!-- Booking Status Message will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="role">Login As:</label>
-            <select id="role" class="form-control">
-                <option value="student">Student</option>
-                <option value="admin">Hostel Admin</option>
-            </select>
-        </div>
-        <p id="errorMessage" class="error"></p>
-        <div class="btn-container">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="reset" class="btn btn-secondary">Reset</button>
-        </div>
-    </form>
-    <p class="mt-3">Not Registered? <a href="register.html">Register Here</a></p>
-</div>
+    </div>
 
-<!-- JavaScript to Handle Login -->
-<script>
-    document.getElementById("loginForm").addEventListener("submit", function(event) {
-        event.preventDefault();
+    <script>
+        function updateRooms() {
+            const floor = document.getElementById("floor").value;
+            const roomSelect = document.getElementById("room");
+            roomSelect.innerHTML = "";
 
-        // Predefined login credentials
-        const users = [
-            { username: "student1", password: "student123", role: "student" },
-            { username: "student2", password: "student456", role: "student" },
-            { username: "admin", password: "admin123", role: "admin" }
-        ];
-
-        // Get entered values
-        let username = document.getElementById("username").value.trim();
-        let password = document.getElementById("password").value.trim();
-        let role = document.getElementById("role").value;
-
-        // Check if credentials are valid
-        let user = users.find(user => user.username === username && user.password === password && user.role === role);
-
-        if (user) {
-            localStorage.setItem("loggedInUser", JSON.stringify(user)); // Store login session
-
-            if (role === "student") {
-                window.location.href = "student_dashboard.html"; // Redirect to Student Dashboard
-            } else if (role === "admin") {
-                window.location.href = "admin_dashboard.html"; // Redirect to Admin Dashboard
+            for (let i = 1; i <= 4; i++) {
+                let roomNumber = ${floor}0${i};
+                let option = document.createElement("option");
+                option.value = roomNumber;
+                option.textContent = Room ${roomNumber};
+                roomSelect.appendChild(option);
             }
-        } else {
-            document.getElementById("errorMessage").innerText = "Invalid username, password, or role!";
         }
-    });
-</script>
 
+        document.getElementById("bookingForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Get form values
+            const name = document.getElementById('name').value;
+            const fatherName = document.getElementById('fatherName').value;
+            const motherName = document.getElementById('motherName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const aadhar = document.getElementById('aadhar').value;
+            const room = document.getElementById('room').value;
+            const roomType = document.getElementById('roomType').value;
+
+            // Check if all fields are filled
+            if (name && fatherName && motherName && email && phone && aadhar && room && roomType) {
+                const message = Dear ${name}, your booking for Room ${room} (${roomType}) has been confirmed!;
+
+                // Insert message into modal
+                document.getElementById('bookingStatusMessage').innerText = message;
+                var myModal = new bootstrap.Modal(document.getElementById('bookingModal'), {});
+                myModal.show();
+            }
+        });
+
+        window.onload = updateRooms;
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

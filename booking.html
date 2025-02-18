@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Booking</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Book Your Room</h2>
+        
+        <div class="row">
+            <div class="col-md-3">
+                <img src="https://tribestays.com/wp-content/uploads/2022/01/Youth-Hostel4.jpg" class="img-fluid" alt="Room Image 1">
+            </div>
+            <div class="col-md-3">
+                <img src="https://pix10.agoda.net/hotelImages/421/4218107/4218107_18012317260061260490.jpg?s=1024x768" class="img-fluid" alt="Room Image 2">
+            </div>
+            <div class="col-md-3">
+                <img src="https://www.ranimeyyammaihostel.org/wp-content/uploads/2021/04/04_s.jpg" class="img-fluid" alt="Room Image 3">
+            </div>
+            <div class="col-md-3">
+                <img src="https://www.hiusa.org/wp-content/uploads/2023/03/HI-Pigeon-Point-Lighthouse-hostel-three-women-in-bunks-1000x550-min-778x446.jpg" class="img-fluid" alt="Room Image 4">
+            </div>
+        </div>
+        
+        <div class="row" id="roomGrid"></div>
+        <form id="bookingForm" class="mt-4">
+            <div class="mb-3">
+                <label class="form-label">Select Floor:</label>
+                <select id="floor" class="form-control" onchange="updateRooms()">
+                    <option value="1">1st Floor</option>
+                    <option value="2">2nd Floor</option>
+                    <option value="3">3rd Floor</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Select Room:</label>
+                <select id="room" class="form-control"></select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Room Type:</label>
+                <select class="form-control">
+                    <option>3 Sharing</option>
+                    <option>4 Sharing</option>
+                    <option>6 Sharing</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Room Preference:</label>
+                <select id="roomType" class="form-control">
+                    <option value="AC">AC Room</option>
+                    <option value="Non-AC">Non-AC Room</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Name:</label>
+                <input type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Father's Name:</label>
+                <input type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Mother's Name:</label>
+                <input type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email:</label>
+                <input type="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Phone Number:</label>
+                <input type="tel" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Aadhar Number:</label>
+                <input type="text" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-success">Book Room</button>
+        </form>
+    </div>
+
+    <script>
+        function updateRooms() {
+            const floor = document.getElementById("floor").value;
+            const roomSelect = document.getElementById("room");
+            roomSelect.innerHTML = "";
+            const roomGrid = document.getElementById("roomGrid");
+            roomGrid.innerHTML = "";
+            
+            for (let i = 1; i <= 4; i++) {
+                let roomNumber = floor + "0" + i;
+                let option = document.createElement("option");
+                option.value = roomNumber;
+                option.textContent = "Room " + roomNumber;
+                roomSelect.appendChild(option);
+                
+                let col = document.createElement("div");
+                col.className = "col-md-3 text-center";
+                col.innerHTML = `<div class='card'><div class='card-body'><h5>Room ${roomNumber}</h5></div></div>`;
+                roomGrid.appendChild(col);
+            }
+        }
+        
+        document.getElementById("bookingForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            alert("Room booked successfully!");
+        });
+
+        window.onload = updateRooms;
+    </script>
+</body>
+</html>
